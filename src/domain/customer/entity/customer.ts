@@ -1,3 +1,5 @@
+import EventDispatcherInterface from "../../@shared/event/event-dispatcher.interface";
+import CustomerAddressChangedEvent from "../event/customer-addrress-changed.event";
 import Address from "../value-object/address";
 
 export default class Customer {
@@ -42,9 +44,15 @@ export default class Customer {
   get Address(): Address {
     return this._address;
   }
-  
-  changeAddress(address: Address) {
+
+  changeAddress(address: Address, dispatcher: EventDispatcherInterface | null) {
     this._address = address;
+    const event = new CustomerAddressChangedEvent({
+      id: this._id,
+      name: this._name,
+      address
+    });
+    dispatcher?.notify(event);
   }
 
   isActive(): boolean {
